@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scrap</title>
+	<link rel="shortcut icon" type="image/png" href="static/xray.png"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='https://fonts.googleapis.com/css?family=Comfortaa|Roboto:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript">
+
+		$(document).ready(function() { 
+		    $('#btnGetComments').click(function() {
+		        event.preventDefault();
+		        var form_data = new FormData($('#formGetComments')[0]);
+		        $.ajax({
+		            type: 'POST',
+		            url: '/',
+		            data: form_data,
+		            contentType: false,
+		            processData: false,
+		            dataType: 'json'
+		        }).done(function(data, textStatus, jqXHR){
+		        	comments = data["comments"];
+
+		        	comments.forEach(get_comments);
+					function get_comments(comment, index) {
+						html_comment = "<tr><td>" + comment + "</td></tr>";
+						$("#tableComments").append(html_comment);
+					}
+
+		            console.log(data["comments"]);
+		            console.log(data["comments"].length);
+		        }).fail(function(data){
+		        	$("#modalError").modal({show:true});
+		        });
+		    });
+        }); 
+
+	</script>
+</head>
+<body class="container">
+	<p>Youtube Comment Scraping</p>
+
+	<form id="formGetComments" method="POST" enctype="multipart/form-data">
+		<input type="text" name="url" id="txtUrl" class="form-control" value="https://www.youtube.com/watch?v=au-MlOmYX80">
+		<input id="btnGetComments" class="btn btn-primary" type="submit" name="submit" value="get comments">
+	</form>
+
+	<table id="tableComments" class="table">
+  		<thead class="thead-dark">
+		<tr><th>Comments</th></tr>
+	</table>
+
+	<!--Error Modal -->
+		<div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title text-danger" id="exampleModalLongTitle">Error</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        Comments Not Found!
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+		      </div>
+		    </div>
+		  </div>
+		</div>
+</body>
+</html>
