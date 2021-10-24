@@ -5,7 +5,7 @@ import os
 
 # url = "https://www.youtube.com/watch?v=au-MlOmYX80"
 
-url = ""
+url = "https://www.youtube.com/watch?v=fa89NxhAKis"
 
 options = webdriver.ChromeOptions()
 # options.add_argument('headless')
@@ -14,7 +14,7 @@ options.add_argument("disable-gpu")
 
 def get_comments(url):
 
-		driver = webdriver.Chrome(executable_path=r"chromedriver.exe", chrome_options=options)
+		driver = webdriver.Chrome(executable_path=r"chromedriver.exe", options=options)
 		driver.get(url)
 		scrollval = 500 
 
@@ -35,6 +35,8 @@ def get_comments(url):
 			for comment in comments:
 				final_comments.append(comment.text)
 
+			# print(final_comments)
+			print(scrollval)
 			if scrollval == 10000:
 				return final_comments
 
